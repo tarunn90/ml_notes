@@ -9,4 +9,4 @@
 - Keep training data for prediction
 - E.g., KNN
 
-![[Pasted image 20250927100805.png]]
+<img src="Pasted image 20250927100805.png">

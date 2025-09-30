@@ -6,21 +6,22 @@ Define $K$ centroids (points); each represents a distinct cluster. Assign all po
 
 Objective function for one cluster: **minimize the** **_within-cluster variation_** (given by sum of pairwise squared Euclidean distance) between all the points in that cluster:
 
-  ![[WIG)- CA 2 Eli, - cA)2,.png]]
 
+<img src="kmeans_img_1.png">
 
 Objective function across clusters: minimize the within-cluster variation across all clusters
 
-![[minimize 1.png]]
+<img src="minimize 1.png">
 
 Or:
+<img src="minimize 2.png">
 
-![[minimize 2.png]]
+
   
 
 The within-cluster variation is the same as the Euclidean distance of all the points to each point’s centroid:
 
-![[TON E Ele, w73=2 ELoy.png]]
+<img src="k_means_img_2.png">
 
 # Algorithm
 

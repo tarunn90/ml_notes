@@ -14,7 +14,7 @@ In general, more flexible methods have higher variance. For example, a regressio
 Bias is the error from estimating a real-life problem with a (necessarily) simple model. 
 
 For example, estimating the non-linear relationship between Y and X below with a linear regression will _always_ have high error, and so a linear estimator will have high bias:
-![[Pasted Graphic.png]]
+<img src="Pasted Graphic.png">
 
 If, on the other hand, the true relationship between Y and X was linear, then this estimator would have no bias, and there would be no benefit to increasing flexibility. 
 
@@ -22,7 +22,7 @@ High-bias models tend to make stronger assumptions about the underlying nature o
 
 As we increase the flexibility of our models, in general, the bias will decrease and the variance will increase. **The relative change in these quantities will determine whether the test MSE increases or decreases.** This is illustrated in the red curve of the right-hand panel below:
 
-![[FIGURE 2.9. Left Data simulated from, shown in black. Three estimates on.png]]
+<img src="FIGURE 2.9. Left Data simulated from, shown in black. Three estimates on.png">
 
 # High Variance, Low Bias
 
