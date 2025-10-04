@@ -1,3 +1,4 @@
+# Theory
 The error term for any estimator can be decomposed into the bias and the variance. Let $f$ be our estimator and $y$ be the truth:
   
 $$\text{Error} = \mathbb{E}[y-f] = \text{Var}(f) + \text{Bias}(f)^2$$
@@ -5,16 +6,16 @@ $$\text{Error} = \mathbb{E}[y-f] = \text{Var}(f) + \text{Bias}(f)^2$$
 Here, the error denotes the expected test error we would obtain if we repeatedly learned $f$ on a large number of training sets and tested each on a given test set. 
 
 
-# Variance
+## Variance
 Variance is the amount by which $f$ would change if we estimated it using a different training data set. Ideally, $f$ would not vary too much across training sets. **However, if a given estimator has high variance then small changes in the training data can result in large changes in $f$** 
 
 In general, more flexible methods have higher variance. For example, a regression with high-order splines will have high variance. 
 
-# **Bias** 
+## **Bias** 
 Bias is the error from estimating a real-life problem with a (necessarily) simple model. 
 
 For example, estimating the non-linear relationship between Y and X below with a linear regression will _always_ have high error, and so a linear estimator will have high bias:
-<img src="Pasted Graphic.png">
+<img src="imgs/Pasted Graphic.png">
 
 If, on the other hand, the true relationship between Y and X was linear, then this estimator would have no bias, and there would be no benefit to increasing flexibility. 
 
@@ -22,7 +23,7 @@ High-bias models tend to make stronger assumptions about the underlying nature o
 
 As we increase the flexibility of our models, in general, the bias will decrease and the variance will increase. **The relative change in these quantities will determine whether the test MSE increases or decreases.** This is illustrated in the red curve of the right-hand panel below:
 
-<img src="FIGURE 2.9. Left Data simulated from, shown in black. Three estimates on.png">
+<img src="imgs/FIGURE 2.9. Left Data simulated from, shown in black. Three estimates on.png">
 
 # High Variance, Low Bias
 

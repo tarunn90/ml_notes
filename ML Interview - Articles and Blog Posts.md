@@ -1,0 +1,4 @@
+- [Airbnb - EBR](https://medium.com/airbnb-engineering/embedding-based-retrieval-for-airbnb-search-aabebfc85839)
+	- RecSys: retrieval, contrastive learning, two-tower model, online serving
+- [Airbnb - Streaming data](https://medium.com/airbnb-engineering/building-a-user-signals-platform-at-airbnb-b236078ec82b)
+	- Streaming data: Kafka, Flink, read vs write

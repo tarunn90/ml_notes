@@ -1,6 +1,15 @@
 
+## Online Learning: General Survey and Concepts
 
-  
+### Definitions and Principles
+
+* **Online Learning (OL):** A field of ML where a learner attempts to predict/decide by learning from a sequential stream of data instances one by one.
+
+* **Goal:** Maximize accuracy for the sequence of predictions given feedback on previous tasks.
+
+* **Advantages over Batch Learning:** Models can be updated instantly and efficiently when new data arrives, offering better scalability for continuous data streams. OL algorithms are often simple to implement and founded on solid theory.
+
+
 # Levels of RTML
 
 * **Level 1: Online predictions (real-time prediction):** The ML system makes predictions in real-time.
@@ -59,7 +68,7 @@ Companies typically progress through stages when moving towards online inference
 * **Requirements:** Mature streaming infrastructure, efficient stream processing engine, and a feature store (for materialized feature consistency).
 
 
-## Continual Learning (Level 2)
+## Level 2: Continual Learning 
 
 ### Defining Continual Learning (CL)
 
@@ -174,15 +183,3 @@ Constructs task-specific/adaptive parameters using specialized architectures.
 | **Continual Reinforcement Learning (CRL)** | Agents learn sequentially in non-stationary environments. | Uses memory replay (of old experiences) and on-policy learning (of novel experiences), often incorporating regularization (policy consolidation). |
 
 | **Natural Language Processing (NLP) CL** | Diverse scenarios, characterized by dependence on **pre-trained Transformer architectures**. | **Parameter-efficient fine-tuning** techniques are adapted, such as adaptor-tuning (inserted layers) and prompt-tuning (trainable prompt tokens). KD and Experience Replay are also used extensively. |
-
-  
-
-## Online Learning: General Survey and Concepts
-
-### Definitions and Principles
-
-* **Online Learning (OL):** A field of ML where a learner attempts to predict/decide by learning from a sequential stream of data instances one by one.
-
-* **Goal:** Maximize accuracy for the sequence of predictions given feedback on previous tasks.
-
-* **Advantages over Batch Learning:** Models can be updated instantly and efficiently when new data arrives, offering better scalability for continuous data streams. OL algorithms are often simple to implement and founded on solid theory.

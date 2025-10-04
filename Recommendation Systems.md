@@ -4,17 +4,7 @@
 - https://medium.com/data-science/recommender-systems-a-complete-guide-to-machine-learning-models-96d3f94ea748 
 
 
-# Common design pattern:
 
-(1) Retrieval -> (2) Scoring -> (3) Re-ranking
-
-(1) Retrieval: generate smaller subset from population of items. Fast and scalable but not precise (high recall, low precision)
-
-(2) Scoring: use precise model to score candidates
-
-(3) Re-ranking: Rank by score but also apply filters, e.g., user explicitly dislike or boost newer items. 
-
-# Embeddings
 
 # Similarity Measures
 - Cosine similarity
@@ -25,32 +15,58 @@
 
 More popular items may have larger norms (because they get more gradient updates and move farther from the origin during training) and this will influence the dot product similarity, for better or worse.
 
+
 # Content-Based Filtering
 
 Uses *similarity between items* to recommend items similar to what the user has liked. 
 * Each row in the item matrix represents an item's features. Might be binary encoded. 
 * We compare each item row to the user's row with the same features. 
 
-<img src="Pasted image 20250923110510.png">
+<img src="imgs/Pasted image 20250923110510.png">
 
 - Pros: 
 	- Doesn't need data from other users
 	- Can capture user-specific interests
 - Con:
 	- Cold-start problem if new user 
-	- Feature representation requires hand-engineering
-	- Can't recommend *new* interests for user since it only works off prior interests
+	- Feature representation requires hand-engineering: you need to create features like "genre" or "length" or "director". 
+	- **Can't recommend *new* interests for user since it only works off prior interests:** if a given user has only seen sci-fi movies, you can only recommend to them sci-fi movies! 
+
+<img src="imgs/Pasted image 20251001221137.png">
+
+
 
 # Collaborative Filtering
 
 Uses *similarities between users* to recommend items. If user A is similar to user B and user B liked item 1, we recommend item 1 to user A. 
 - Features can be hand-engineered or learned embeddings
-- **Feedback Matrix**: each row is a user, each column is an item, also called a **user-item matrix**
 - Features can be *explicit* (users' ratings of items) or *implicit* (if user watches or engages with movie) 
 
-Note that this is user-user collaborative filtering, but there is also item-item collaborative filtering:
+## User-Item Matrix
+Aka the **Feedback Matrix**: 
+- Each row is a user
+- Each column is an item
+- Each value is explicit (e.g. rating) or implicit (e.g. watch time, engagement) value for a given (user, item) pair. 
 
-<img src="Pasted image 20250929183846.png">
+$$U_{ij} = \text{Rating from user } i \text{ for item }j$$
+
+
+## User-User (user-based) Collaborative Filtering
+<img src="imgs/Pasted image 20251001221649.png">
+
+In the example above, Alice and Bob both like Movie A and so we infer a) Alice would give Movie C ~2 stars b) Bob would give Movie B ~3 stars
+
+Note that this is **user-based** collaborative filtering, but there is also **item-item** collaborative filtering. 
+
+
+## Item-Item (item-based) Collaborative filtering
+Using the same example, Movies A and C seem negatively correlated, therefore we predict that Alice would give Movie C a low rating. 
+
+
+## Summary of CF vs Content Based Filtering
+
+<img src="imgs/Pasted image 20250929183846.png">
+
 
 ## Matrix Factorization
 
@@ -67,7 +83,7 @@ How do we learn $U$ and $V$? We can use squared error between $A$ and $UV^T$:
 
 $$\min_{U,V} \sum_{(i,j)} (A_{ij} - \langle U_i, V_j \rangle)^2$$
 
-Then we just learn $U, V$ to minimize the squared loss using the observed data.
+Then we just learn $U, V$ to minimize the squared loss using the observed data. In theory, we could solve this via SVD, but in practice since A is very sparse this isn't a great approach. In practice, we use SGD or Weighted Alternating Least Squares to minimize the loss function. Note that **the loss function is not convex.** 
 
 Note that the prediction for a specific pair item $i$ and user $j$ basically boils down to the dot product of $U_i, V_j$. 
 
@@ -87,6 +103,8 @@ Cons:
 	- Can ask user for interests on registration
 - Hard to include "side features", e.g., age, country
 
+
+
 # Deep Neural Networks
 
 Say we treat the problem as a multiclass classification prediction problem where the *input is the user query* and the *output is a probability vector with dimension = number of items*. Then the model output becomes the probability vector that a given user interacts with all of our items. 
@@ -97,7 +115,7 @@ Say we treat the problem as a multiclass classification prediction problem where
 - Then the model maps: $\psi(x) \rightarrow \hat{p} = h(\psi(x)V^T)$ where:
 	- $\hat{p}$ is the probability vector
 	- $h$ is the softmax function
-	- $V \in \mathbb{R}^{nxd}$ is the matrix of weights of the softmax layer, which maps from scores to probabilities. $V$ is kind of our item embedding matrix now. <img src="Pasted image 20250923114716.png">  
+	- $V \in \mathbb{R}^{nxd}$ is the matrix of weights of the softmax layer, which maps from scores to probabilities. $V$ is (sort of) our item embedding matrix now. <img src="imgs/Pasted image 20250923114716.png">  
 	- $\psi(x) \in \mathbb{R}^d$ is the output of the last hidden layer: this is the "embedding" of our user query $x$. 
 	- $V_j \in \mathbb{R}^d$ is the vector of weights connecting the last hidden layer to the output for item $j$. This is the "embedding" of item $j$. 
 	- The final prediction *is still a dot product*, but instead of $\langle U_i, V_j \rangle$ it's $\langle \psi(x), V_j \rangle$ 
@@ -119,23 +137,9 @@ One common problem with deep factorization is **folding**:
 - If the model is only shown positive examples, the embeddings from different items/queries may end up in the same region, leading to spurious recommendations. E.g., items with different languages might end up together. 
 - To address this, we can use **negative sampling** during training: we show the model negative samples to push them farther apart
 	- We can also filter out such cases during candidate generation to avoid this during inference
-
-# Retrieval (Candidate Generation)
-
-- Can use KNN to find closest items in embedding space 
-- For large-scale retrieval, this can be too slow
-	- If the embedding is known statically, we can precompute list of top candidates for each query offline. Works well for related-item recommendations.
-	- Use approximate nearest neighbors. 
+- We can go one step further with **contrastive learning:** we select (positive, negative) pairs to show the model during training such that it learns embeddings which push apart positive and negative labels. 
 
 
-# Scoring 
-
-* Need to think very carefully about objective function for scoring: <img src="Pasted image 20250923120940.png">  
-
-# Re-Ranking
-- Re-rank candidates according to score plus additional criteria, along with some filters:
-	- Diversity
-	- Filtering
 
 # Factorization Machines
 
@@ -162,3 +166,56 @@ There is an algebra trick that lets us skip having to do all these pairwise inte
 $$\sum_{i,j}{\langle e_i, e_j \rangle} = \text{sum of all embeddings}^2  - \frac{\text{sum of (embeddings squared)}}{2}$$
 
 Factorization machines are **linear** not **deep**. But you can make it deep by feeding FM embeddings into a neural network. 
+
+
+
+# Common design pattern
+
+```mermaid
+flowchart LR
+    A[1 Retrieval] --> B[2 Scoring]
+    B --> C[3 Re-ranking]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff4e1
+    style C fill:#e8f5e9
+```
+
+
+1. Retrieval: generate smaller subset from population of items. Fast and scalable but not precise (high recall, low precision)
+2. Scoring: use precise model to score candidates
+3. Re-ranking: Rank by score but also apply filters, e.g., user explicitly dislike or boost newer items. 
+
+## Retrieval (Candidate Generation)
+- Can use embeddings from Collaborative Filtering or Two Tower model and run KNN to find closest items
+	- For large-scale retrieval, this can be too slow
+	- If the embedding is known statically, we can precompute list of top candidates for each query offline. Works well for related-item recommendations.
+	- Use **Approximate Nearest Neighbor (ANN)** algorithms like **Hierarchical Navigable Small Worlds (HNSW)** 
+- Can use heuristics
+
+
+## Scoring
+* Need to think very carefully about objective function for scoring:
+- Maximizing Click Rate:
+	- The system may recommend click-bait videos
+- Maximize Watch Time:
+	- The system may recommend very long videos
+- Increase diversity and maximize *session* watch time 
+- Scoring can be done with any models which generate probabilities or scores
+	- Logistic regression trained against, e.g., click event
+	- Factorization Machines
+	- DeepFM or neural networks
+	- GBDT's 
+
+## Re-Ranking
+- Re-rank candidates according to score plus additional criteria, along with some filters:
+	- Diversity
+	- Filtering
+
+## Explore vs Exploit
+One thing to consider in the design is how much you "exploit" probabilities and patterns versus trying to "explore" new patterns.
+
+Some possible approaches for "exploration": 
+- Introduce randomization into recommendations (with low probability)
+- Optimize for item diversity alongside item score
+

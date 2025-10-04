@@ -13,7 +13,7 @@
 
 # Research vs Production
 
-![[Pasted image 20250919171611.png]]
+<img src="imgs/Pasted image 20250919171611.png"> 
 
 
 * Oftentimes, research teams prioritize **throughput** (to achieve faster training) while production teams prioritize **latency** (to prioritize faster predictions and better UX). 
@@ -46,7 +46,7 @@
 * **Third-party data:** data collected by companies on people who are not their customers (e.g., Health Gorilla)
 
 # Data Formats and Storage
-* **Data serialization:** the process of converting data into a format that can be stored or transmitted. ![[Pasted image 20250919211255.png]]
+* **Data serialization:** the process of converting data into a format that can be stored or transmitted. <img src="imgs/Pasted image 20250919211255.png"> 
 * JSON: language-independent, human-readable, flexible
 	* Text file
 * CSV: row-major. Consecutive elements in a row are stored next to each other
@@ -62,7 +62,7 @@
 * NumPy can be *either* row-major or column-major
 
 # Data Models
-* **Relational model**: data is structured into tables, where each row is a tuple where order does not matter. ![[Pasted image 20250919213034.png]]
+* **Relational model**: data is structured into tables, where each row is a tuple where order does not matter. <img src="imgs/Pasted image 20250919213034.png"> 
 	* One downside is that due to data normalization, we typically require a lot of expensive joining to get all the necessary data attributes. 
 * **NoSQL:** non-relational, we don't require a schema for the data. It is a movement rather than a specific model
 	* **Document model:** one document is a single string with a unique key that is used to retrieve it. We prioritize the *content* of each item.
@@ -79,7 +79,7 @@
 * **Unstructured data** is more flexible, allowing us to bend with changing input formats or business requirements. 
 	* Note that the data still needs structure *at some point* to be useful. You are essentially pushing the need to "structure" the data to the reader rather than the writer of the data. 
 * **Data warehouses** store structured data. 
-* **Data lakes** store unstructured data .They're useful for storing raw data before processing. ![[Pasted image 20250919214438.png]]
+* **Data lakes** store unstructured data .They're useful for storing raw data before processing. <img src="imgs/Pasted image 20250919214438.png"> 
 
 # ETL or ELT? 
 * With the advent of big data, it became popular to ask "why don't we just load all the data and then figure out what to do with it later"? That way you don't have to figure out the schema up front. 
@@ -107,7 +107,7 @@
 	* Importance sampling
 		* Used when you can't directly sample from P(x) but you can sample from Q(x); we sample from Q(x) and weight by $P(x)/Q(x)$ 
 	* Reservoir sampling
-		* Useful for continually incoming data ![[Pasted image 20250920111035.png]]
+		* Useful for continually incoming data <img src="imgs/Pasted image 20250920111035.png"> 
 ## Labeling
 * Hand Labels
 	* Cons:
@@ -132,7 +132,7 @@
 		* E.g., we can use a base language model as a starting point but then apply it to sentiment analysis or question answering. 
 		* Zero-shot transfer learning: we apply the pretrained base model directly
 		* Fine-tuning: we make small changes to the base model, e.g., retrain the last layer of a neural network or train the whole model for a few epochs. 
-	* **Active Learning:** we improve the efficiency of data labels by actively choosing which samples to train against. ![[Pasted image 20250920114028.png]]
+	* **Active Learning:** we improve the efficiency of data labels by actively choosing which samples to train against. <img src="imgs/Pasted image 20250920114028.png"> 
 		* For a binary classifier, we might choose to label and then train only against samples where the model is very uncertain
 		* Query-by-committee: train the sample model with different sets of hyperparameters, and then select samples with the most disagreement among the committee.  
 		* We can even synthesize samples to learn against in the region of input space with the most uncertainty
@@ -243,7 +243,7 @@ For neural networks, this is a simple recipe to debug poor performance:
 	* You can use Asynchronous SGD: this can lead to gradient staleness and slower convergence but generally not a problem 
 * **Model Parallelism:** different components of the model are trained on different machines. E.g., different machines handle different layers of the network. 
 	* Can run into the same problem as above where you end up waiting.
-* **Pipeline Parallelism:** ![[Pasted image 20250921115302.png]]
+* **Pipeline Parallelism:** <img src="imgs/Pasted image 20250921115302.png"> 
 
 
 # Offline Evaluation
@@ -276,7 +276,7 @@ For neural networks, this is a simple recipe to debug poor performance:
 	- To reduce average latency, you can generate precomputed predictions for popular queries and stream predictions for less popular queries. 
 	- You can precompute predictions for all users and serve them as requests arrive. 
 
-* Batch prediction is largely a product of legacy systems, e.g., MapReduce, Spark. But when companies want to make online inference, they need different systems. This can lead to bugs: ![[Pasted image 20250921222947.png]]
+* Batch prediction is largely a product of legacy systems, e.g., MapReduce, Spark. But when companies want to make online inference, they need different systems. This can lead to bugs: <img src="imgs/Pasted image 20250921222947.png"> 
 	* Frameworks like Apache Flink are meant to unify this. 
 * What do you do if you want to do real-time predictions but your model inference is too slow? There are 3 choices:
 	1. Inference optimization
@@ -328,7 +328,7 @@ For neural networks, this is a simple recipe to debug poor performance:
 	* Edge cases are closely related to outliers, but in this context, edge case := an example where a model performs significantly worse than other examples. Edge cases and outliers are not necessarily 1-to-1. 
 * **Degenerate Feedback Loop**
 	* When predictions influence feedback, which influences subsequent label generation and training. Very common with recommender systems. 
-	* E.g., a rec system might rank song A marginally higher than song B but because A gets more clicks over time, the system keeps ranking A higher and higher. This is known as "exposure bias", "popularity bias", "filter bubble". ![[Pasted image 20250922130512.png]]
+	* E.g., a rec system might rank song A marginally higher than song B but because A gets more clicks over time, the system keeps ranking A higher and higher. This is known as "exposure bias", "popularity bias", "filter bubble". <img src="imgs/Pasted image 20250922130512.png"> 
 	* It is possible to detect degenerate feedback loops by measuring the *diversity* of the system's recommendations - how often does the system recommend the same top N songs versus the long tail of less popular sons?
 
 ## Data Distribution Shifts
@@ -357,7 +357,7 @@ For neural networks, this is a simple recipe to debug poor performance:
 - Addressing data distribution shifts
 	- If the training dataset is large enough, your model should learn such a general distribution that it can handle shifts in production. Popular in academia. 
 	- The most popular approach in industry is to do frequent retraining, either from scratch or fine-tuning. 
-	- You can also choose features that are likely to be more stable: ![[Pasted image 20250922145626.png]]
+	- You can also choose features that are likely to be more stable: <img src="imgs/Pasted image 20250922145626.png"> 
 
 
 ## Monitoring
@@ -371,7 +371,7 @@ For neural networks, this is a simple recipe to debug poor performance:
 	- Application that the ML system runs
 	- Examples include latency, throughput, number of requests, % that return 2XX code, CPU/GPU utilization, memory utilization
 	- **Availability**: how often the system is available to users. This is measured by **uptime**. Conditions to define "up" are set in the SLO or SLA, e.g., "median latency < 200 ms and 99p latency < 2s"
-- **ML metrics** generate artifacts which fall into 4 buckets: raw inputs, features, predictions, and accuracy. ![[Pasted image 20250922150502.png]]
+- **ML metrics** generate artifacts which fall into 4 buckets: raw inputs, features, predictions, and accuracy. <img src="imgs/Pasted image 20250922150502.png">
 	- Accuracy-related metrics: user feedback, natural labels, secondary metrics. 
 	- Predictions: easy to monitor shifts in prediction distribution with 2-sample hypothesis tests. Changes in predictions usually map to changes in inputs. 
 	- Features: feature validation. min, max, median, values belong to predefined set, etc. This is often less useful than it might seem.
@@ -392,7 +392,7 @@ For neural networks, this is a simple recipe to debug poor performance:
 	- **Telemetry:** system's outputs collected at runtime. Logs and metrics collected from cloud services or customer devices. 
 	- We can't catch all bugs before deployment, but we want to minimize downtime/bad predictions
 	- Coarse-grained monitoring: only useful to detect performance issue
-		- Full-feedback, partial-feedback, no-feedback ![[Pasted image 20250922155215.png]]
+		- Full-feedback, partial-feedback, no-feedback <img src="imgs/Pasted image 20250922155215.png"> 
 	- IFF the coarse-grained metrics throw an error, we switch to fine-grained metrics
 		- Min, max values
 		- Unseen categorical values
@@ -411,6 +411,15 @@ For neural networks, this is a simple recipe to debug poor performance:
 - Evaluation cadence != Learning cadence
 	- Offline evaluation = sanity check
 	- Online evaluation: canary analysis, A/B testing
+		- Canary deployment: gradually roll out new version to detect bugs before full deployment
+			- Risk mitigation
+			- Fast rollback
+			- Preferred when you're sure the new version is statistically better
+		- A-B testing
+			- Requires traffic for statistical significance 
+			- Slower
+			- More users are exposed to "less desirable" model
+			- Preferred when you're not sure which version to use
 - Canary testing
 	- New model alongside existing model
 	- Route some traffic to new model

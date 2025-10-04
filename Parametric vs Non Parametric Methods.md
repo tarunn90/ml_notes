@@ -9,4 +9,4 @@
 - Keep training data for prediction
 - E.g., KNN
 
-<img src="Pasted image 20250927100805.png">
+<img src="imgs/Pasted image 20250927100805.png">
