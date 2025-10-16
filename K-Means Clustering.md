@@ -14,7 +14,7 @@ Objective function across clusters: minimize the within-cluster variation across
 <img src="imgs/minimize 1.png">
 
 Or:
-<img src="minimize 2.png">
+<img src="imgs/minimize 2.png">
 
 
   
