@@ -17,6 +17,7 @@
 - [Images](Images.md) 
 - [Search](Search.md) 
 - [Risk Control](Risk%20Control.md) 
+- [Harmful Content](Harmful%20Content.md)
 # System Design Concepts
 - [Online Learning and Inference](Online%20Learning%20and%20Inference.md)
 - [Real-time Models](Real-time%20Models.md)
