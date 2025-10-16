@@ -1,17 +1,25 @@
-# ML Principles
+# Principles
 - [Bias vs Variance](Bias%20vs%20Variance.md)
-- [[Missing Data]]
-- [[Feature Selection]]
-- [[Parametric vs Non Parametric Methods]]
+- [Missing Data](Missing%20Data.md)
+- [Feature Selection](Feature%20Selection.md) 
+- [Parametric vs Non Parametric Methods](Parametric%20vs%20Non%20Parametric%20Methods.md)
 
-# Algorithms and Domains
+# Algorithms
+- [PCA](PCA.md) 
 - [K-Means Clustering](K-Means%20Clustering.md)
-- [Recommendation Systems](Recommendation%20Systems.md)
 - [Neural Networks](Neural%20Networks.md) 
+- [Transformers](Transformers.md) 
+- [Contrastive Learning](Contrastive%20Learning.md)  
 
+# Domains
+- [Recommendation Systems](Recommendation%20Systems.md)
+- [Ranking](Ranking.md) 
+- [Images](Images.md) 
+- [Search](Search.md) 
+- [Risk Control](Risk%20Control.md) 
 # System Design Concepts
 - [Online Learning and Inference](Online%20Learning%20and%20Inference.md)
 - [Real-time Models](Real-time%20Models.md)
 
-# ML Interviews
+# Interviews
 - [ML Interview - Framework](ML%20Interview%20-%20Framework.md)

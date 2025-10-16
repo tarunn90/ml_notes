@@ -8,6 +8,8 @@
 - Is there a baseline model we can compare against? Heuristics? 
 
 ## 2.  Build a high-level design (5 min)
+- Translate the problem into ML: is it classification, regression, recommendation, or ranking?
+	- If it is classification, is it binary, multiclass, or multitask? 
 - This is your system blueprint: no details, just high-level
 - Keep it very high-level: instead of "XGB", say "model"
 
@@ -25,6 +27,7 @@
 	- Which algorithm to use? 
 - Offline evaluation metrics
 	- Which metric? Pros and cons? 
+	- Compare against simple baseline (e.g., predict most prevalent class, recommend most popular videos)
 - Dealing with overfitting
 - Imbalanced classes
 	- Over/under-sampling
@@ -33,10 +36,15 @@
 
 ## 5. Serving (5 min)
 - Online inference or batch inference?
+	- Are there relevant real-time features?
+	- What is the latency requirement? 
 - Online evaluation
-	- CTR, watch time
+	- Recsys - CTR, watch time
+	- Harmful content - prevalence, appeals, user reports
 - Rollout strategy
-	- A/B test? Canary? 
+	- Shadow deployment
+	- A/B test
+	- Canary
 - Autoscaling
 	- Kubernetes has load balancing and health checks
 - For RecSys - explore vs exploit
@@ -44,6 +52,16 @@
 	- Cadence?
 	- Continual learning? 
 	- Active learning? 
+- Deployment
+	- On-cloud vs device
+	- Model compression: model pruning, quantization
+- Model Registry
+	- Track model versions and required metadata to recreate model
+- Monitoring
+	- Online accuracy
+	- Label shift or Feature shift causing train-serving skew: set alerts. 
+		- Might need to retrain more frequently
+	- IFF we detect a problem from coarse-grained metrics, we switch to fine-grained metrics
 
 ## 6. Ask the Interviewer Questions! 
 

@@ -123,11 +123,12 @@
 	* When data comes from different sources, it's important to keep track of the origin of each sample and its label
 	* This helps us flag potential biases and identify areas of improvement
 * What if there are no or insufficient hand labels available?
-	* **Weak supervision:** use a collection of weak heuristics to generate labels. E.g., Snorkel.
+	* **Weak supervision:** use a collection of weak heuristics to generate labels. 
+		* E.g., Snorkel.
 	* **Semi-supervision:** from a small set of initial labels, we extrapolate to other labels. There are many possible approaches to this
-		* Self-training: start by training a model against existing labels, then make predictions on unlabeled samples. Take only the predictions with very high or low probability scores, add those to the training set, and repeat. 
-		* Label propagation: assume that samples that are close in feature space have the same labels. We can use KNN or clustering. 
-		* Perturbations: we can generate new training samples by perturbing initial samples but keeping the same labels. 
+		* **Self-training**: start by training a model against existing labels, then make predictions on unlabeled samples. Take only the predictions with very high or low probability scores, add those to the training set, and repeat. 
+		* **Label propagation**: assume that samples that are close in feature space have the same labels. We can use KNN or clustering. 
+		* **Perturbations**: we can generate new training samples by perturbing initial samples but keeping the same labels. 
 	* **Transfer Learning:** apply a model trained on one task (presumably with many samples) to the task at hand (the *downstream task*) as a starting point. 
 		* E.g., we can use a base language model as a starting point but then apply it to sentiment analysis or question answering. 
 		* Zero-shot transfer learning: we apply the pretrained base model directly

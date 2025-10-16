@@ -275,7 +275,9 @@ Cons:
 
 # CLIP
 - Learns joint **image-text embeddings** via **contrastive learning** on image-caption pairs
-- Has **zero-shot** capabilities 
+	- Scraped ~400 million image-text pairs (images + captions) from the web
+	- There were no "labels" per se: *the embeddings were learned to minimize the distance from each image to its own caption and vice versa* 
+	- Can compare text- and image-embeddings from the model directly with each other: **they are projected into the same dimensional space**
+- The model has **zero-shot** capabilities 
 - Embeddings are L2-normalized, so cosine similarity and dot product are equivalent
 - Newer open source models e.g. OpenCLIP or SigLIP may have better performance
-- Can compare text- and image-embeddings from the model directly with each other: **they are projected into the same dimensional space**

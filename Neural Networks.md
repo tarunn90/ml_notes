@@ -3,6 +3,7 @@
 - [CS 231N course notes](https://cs231n.github.io/optimization-1/) 
 
 
+
 # Optimization
 The **numerical gradient** is simply approximating the derivative by taking a very small step in the direction of each dimension and calculating the slope of the change:
 
@@ -25,8 +26,16 @@ The following basic core loop is called **gradient descent:**
 - Rather than updating one example at a time (**stochastic gradient descent**), we can do **minibatch gradient descent**. Due to parallelization and vectorization, it is faster to evaluate the gradient for 100 examples than to find the gradient for one example 100 times. 
 	- Note that the batch size is often in powers of 2 because many vectorized operations work better when the input is a power of 2. 
 
+
+
+
+
 # Backpropagation
-**Standardizing** the input data during preprocessing is very important for gradient descent because otherwise the gradient descent will focus on one feature and ignore the others. 
+**Standardizing** the input data during preprocessing is very important for gradient descent because otherwise the gradient descent will focus on one feature and ignore the others. Note: BatchNorm helps with this. 
+
+
+
+
 
 # Activation Functions
 
@@ -35,7 +44,7 @@ $$\sigma(x) = \frac{1}{1 + e^{-x}}$$
 
 - Squashes real numbers into the range $[0,1]$ 
 - Rarely ever used in practice for 2 reasons:
-	- Sigmoids *saturate and kill gradients*, restricting the flow of signal further up the network
+	- Sigmoids *saturate and kill gradients*, restricting the flow of signal further up the network. This is because large magnitude positive or negative input values have very small sigmoid outputs and therefore have very small gradients. 
 	- Sigmoid outputs are not zero-centered
 
 ## Tanh
@@ -44,6 +53,7 @@ $$\text{tanh}(x) = 2\sigma(2x) - 1$$
 
 - Squashes real numbers into the range $[-1,1]$ 
 - Simply a **zero-centered** and scaled sigmoid function
+- Has the same problem as sigmoid with saturating and killing gradients. 
 
 # ReLU
 
@@ -73,6 +83,9 @@ $$\text{Maxout}(x) = \max(w_1^Tx+b_1, w_2^Tx + b_2)$$
 “_What neuron type should I use?_” Use the ReLU non-linearity, be careful with your learning rates and possibly monitor the fraction of “dead” units in a network. If this concerns you, give Leaky ReLU or Maxout a try. Never use sigmoid. Try tanh, but expect it to work worse than ReLU/Maxout.
 
 
+
+
+
 # Architecture
 
 - An $N$ layer neural network includes the output but *not* the input layer, so a 1-layer neural network maps the input to the output with no hidden layer and a 2-layer neural network has one hidden layer
@@ -94,6 +107,8 @@ The more neurons and the more hidden layers we have, the more likely we are to o
 > The subtle reason behind this is that smaller networks are harder to train with local methods such as Gradient Descent: It’s clear that their loss functions have relatively few local minima, but it turns out that many of these minima are easier to converge to, and that they are bad (i.e. with high loss). Conversely, bigger neural networks contain significantly more local minima, but these minima turn out to be much better in terms of their actual loss. Since Neural Networks are non-convex, it is hard to study these properties mathematically, but some attempts to understand these objective functions have been made, e.g. in a recent paper [The Loss Surfaces of Multilayer Networks](http://arxiv.org/abs/1412.0233). In practice, what you find is that if you train a small network the final loss can display a good amount of variance - in some cases you get lucky and converge to a good place but in some cases you get trapped in one of the bad minima. On the other hand, if you train a large network you’ll start to find many different solutions, but the variance in the final achieved loss will be much smaller. In other words, all solutions are about equally as good, and rely less on the luck of random initialization.
 
 
+
+
 # Data Preprocessing
 
 - **Mean subraction:** subtract the mean from every feature in the data. 
@@ -106,13 +121,15 @@ These scaling methods only make sense if each feature has different scale but sh
 
 - **PCA dimensionality reduction:** take the first K components from PCA after zero-centering the data. 
 
+
+
 # Weight Initialization
 
 - DON'T: initialize all weights to 0. If every neuron computes the same output, then they will all get the same gradients during backprop and get the same updates. 
 - **Small random numbers:** with proper normalization, we can guess that the weights will be evenly distributed around the origin. 
 	- `W = 0.01 * np.random.randn(D, H)` where `D` = number of neurons in current layer and `H` = number of neurons in previous layer 
 - **Scale by sqrt(n)**: If we follow the above approach, the variance of the outputs scales with the number of inputs. Therefore, we can inverse-weight by the number of inputs: `w = np.random.randn(n)/sqrt(n)`. This ensures that neurons with more inputs start off an an even footing with other neurons. 
-- **Zero bias** initialization is common for biases
+- **Zero bias**: initialization=0 is common for biases
 - **Batch normalization** actually takes care of a lot of the initialization headaches for us! 
 	- Batch normalization is differentiable and forces weights to take on a unit gaussian distribution from the start of training
 
@@ -127,6 +144,10 @@ $$
 $$
 
 where $\gamma, \beta$ are learnable parameters (scale and shift respectively) 
+
+
+
+
 
 # Regularization
 
@@ -210,6 +231,9 @@ def predict(X):
 ```
 
 
+
+
+
 # Loss Functions
 
 ## Classification
@@ -224,6 +248,8 @@ def predict(X):
 	* Note that the gradient for absolute value is $\text{sign}$ 
 
 The L2 norm loss is not robust to outliers: these can introduce huge gradients. Therefore, it can be worth transforming the problem from regression into classification, e.g., binning the outcomes. 
+
+
 
 
 # Training
@@ -244,23 +270,26 @@ Note that precision really matters here: use double not single floating point pr
 <img src="imgs/Pasted image 20251003123901.png"> 
 
 
+
+
+
 # Parameter Updates
 
 Let $w$ be the weight and $dw$ be the gradient after backpropagation.
 
-## **Vanilla updates:** 
-$w = w - \alpha (dw)$ where $\alpha$ is the learning rate
+## Vanilla updates:
+$w = w - \alpha \nabla f(w)$ where $\alpha$ is the learning rate
 ```python 
 w -= alpha * dw
 ```
 
-## **Momentum update**
+## Momentum
 
 For momentum, we introduce another variable: $v$, the velocity. Here, $v$ is a stateful variable (initialized at 0) that changes in proportion to the gradient. In turn, the velocity informs the position of the weights. 
 
 $$ 
 \displaylines{
-v = \mu v - \alpha (dw) \\
+v = \mu v - \alpha \nabla f(w) \\
 w = w + v
 }
 $$
@@ -271,6 +300,41 @@ v = mu * v - alpha * dw
 w += v
 ```
 
+Momentum helps in a few ways:
+1. **Smoothing oscillations:** While the gradient can be "spiky", adding velocity helps dampen the gradient, resulting in smoother weight updates. E.g., if $v$ is high, then even if the gradient $\nabla f(w)$ is low, then we still do a large update step. Or, if the gradient suddenly changes direction $v$ would still point in the same direction from the last update. 
+2. **Faster updates over shallow areas:** in areas where the gradient updates are consistent but small ("shallow"), vanilla updates can be very slow. Momentum will "pick up" inertia, resulting in faster updates. 
+	- This also helps with pushing through plateaus since the update has some accumulated inertia from previous updates. 
+3. **Friction:** you are more likely to overshoot the minimum because of the inertia, but the $\mu$ parameter **dampens velocity** over time so that the system eventually settles over time and reaches convergence. 
+
+### Momentum Example
+$$
+\begin{aligned}
+f(x) &= x^2 \\
+\nabla f(x) &= 2x \\
+x_0 &= 5 \\
+\end{aligned}
+$$
+**Vanilla SGD**: 
+$\alpha=0.1$ 
+
+| Step | $x_t$ | Gradient ($2x_t$) | Update ($\Delta x = -0.1 · 2x_t$) | New $x_{t+1}$ |
+| ---- | ----- | ----------------- | --------------------------------- | ------------- |
+| 0    | 5.0   | 10                | -1.0                              | 4.0           |
+| 1    | 4.0   | 8                 | -0.8                              | 3.2           |
+| 2    | 3.2   | 6.4               | -0.64                             | 2.56          |
+| 3    | 2.56  | 5.12              | -0.512                            | 2.048         |
+| 4    | 2.048 | 4.096             | -0.4096                           | 1.638         |
+
+**Momentum:** 
+$\mu = 0.9, \alpha=0.1$ 
+
+| Step | $x_t$ | $v_t$ | Gradient ($2x_t$) | New $v_{t+1}$                 | New $x_{t+1}$ |
+| ---- | ----- | ----- | ----------------- | ----------------------------- | ------------- |
+| 0    | 5.0   | 0.0   | 10                | 0.9·0 - 0.1·10 = -1.0         | 4.0           |
+| 1    | 4.0   | -1.0  | 8                 | 0.9·(-1) - 0.1·8 = -1.7       | 2.3           |
+| 2    | 2.3   | -1.7  | 4.6               | 0.9·(-1.7) - 0.1·4.6 = -2.06  | 0.24          |
+| 3    | 0.24  | -2.06 | 0.48              | 0.9∗(−2.06)−0.1∗0.48 = −1.91  | -1.67         |
+| 4    | -1.67 | -1.91 | -3.34             | 0.9∗(−1.91)−0.1∗(−3.34)=−1.39 | -3.06         |
 ## Annealing the Learning Rate
 
 - **Step decay:** reduce hte learning rate by some factor every few epochs, e.g., by 0.1 every 20 epochs. 
@@ -281,39 +345,64 @@ w += v
 
 With second order methods (based on Newton's method) we can perform more aggressive parameter updates by considering the curvature of the loss function. A popular method here is **L-BFGS** but it is quite computationally expensive because it doesn't work well on mini-batches and so it isn't common to use. 
 
-## Adagrad
+## Adaptive Learning Rates
+Adaptive learning rates are methods where the learning rate changes over time in response to the gradient. The learning rate can even change **per-parameter** as some dimensions may have steeper or shallower gradients.
 
-Adagrad is an adaptive learning rate method which is run **per-parameter**. 
+## Adagrad
+Adagrad is an adaptive learning rate method which is run per-parameter. 
+
+For a specific weight $w_i$: 
+$$
+\begin{aligned}
+\text{cache} &= \text{cache} + \nabla w_i^2 \\
+w_i &= w_i - \frac{\alpha}{\sqrt{\text{cache}} + \epsilon} \nabla w_i
+\end{aligned}
+$$
+
 
 ```python
 cache += dw**2 
 w += -alpha * dw / (np.sqrt(cache) + eps)
 ```
 
-`cache` has size equal to the size of the gradient, and has the per-parameter sum of squared gradients. This way, parameters with large gradients will have smaller learning rates while parameters with small updates will have higher learning rates. 
+`cache` has size equal to the size of the gradient, and stores the **per-parameter sum of squared gradients**. This way, **parameters with large gradients will have smaller learning rates while parameters with small updates will have higher learning rates**. 
+
+This sounds counter-intuitive! The reason for this is because if a parameter consistently has large gradients (as represented by `cache`), it must be because *the loss function is very sensitive to that parameter* and the *gradient is pointing in a very steep direction of the loss surface*. Therefore, taking large steps could easily overshoot the minimum. 
+
+Benefits:
+1. Amplifies progress for a parameter when the gradients are small and progress is flat 
+2. Helps in domains with sparse features, like NLP or recommendation systems. 
+	- Common features are seen more often, get more accumulated gradients, and smaller learning rates
+	- Rarer features get smaller learning rates
+
+## Momentum vs Adagrad
+Note that Adagrad and momentum have *opposite effects* on the parameter updates. 
+- Momentum speeds up the velocity of updates when the gradients consistently point in the same direction: it **accelerates learning**. 
+- Adagrad slows down the velocity of updates. If the gradients are consistently large, we **decelerate learning**. 
 
 ## RMSProp
-
-RMSProp uses a moving average of squared gradients:
+RMSProp is an improvement on Adagrad. Rather than a "sum of squared gradients" like Adagrad, RMSProp uses a moving average of squared gradients but with exponential decay, such that the older squared gradients eventually go to zero. 
 ```python 
-cache += decay_rate * cahce + (1 - decay_rate * dw **2)
+cache += decay_rate * cache + (1 - decay_rate * dw ** 2)
 w -= alpha * dx / (np.sqrt(cache) + eps)
 ```
 
 The cache variable here is "leaky": the updates do not get monotonically smaller. 
 
-## Adam
-Adam is similar to RMSProp but with momentum 
-
+## Adam: Combining Momentum and Adaptive Learning
+Adam is similar to RMSProp but with momentum:
 ```python 
 m = beta1*m + (1-beta1)*dw
 v = beta2*v + (1-beta2)*(dw**2)
 w -= alpha * m / (np.sqrt(v) + eps)
 ```
 
-It has a "smooth"version of the gradient from RMSProp. 
-# Hyperparameter Optimization
+It has a "smooth" version of the gradient from RMSProp. 
 
+
+
+
+# Hyperparameter Optimization
 - Random search > Grid Search
-- Stage the search from corase to fine
+- Stage the search from coarse to fine
 - Bayesian HPO: [Hyperopt](https://jaberg.github.io/hyperopt/) 
