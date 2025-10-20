@@ -4,3 +4,12 @@
 	- Entity extraction: NER, BERT, word2vec
 - [Airbnb - Streaming data](https://medium.com/airbnb-engineering/building-a-user-signals-platform-at-airbnb-b236078ec82b)
 	- Streaming data: Kafka, Flink, read vs write
+- [Netflix - Deep Learning + RecSys](https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/18140) 
+	- RecSys: deep learning, offline vs online
+
+
+
+## Companies
+- Airbnb
+- Netflix
+- StitchFix 

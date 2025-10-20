@@ -3,10 +3,10 @@
 - [ ] Coding
 	- [x] Prefix Sum - ~~easy~~, ~~medium~~
 	- [ ] Array problems
-		- [ ] Easy
+		- [x] Easy
 		- [ ] Medium
-	- [ ] Sliding window - https://www.geeksforgeeks.org/dsa/window-sliding-technique/#
-- [ ] ML 
+	- [x] Sliding window - https://www.geeksforgeeks.org/dsa/window-sliding-technique/#
+- [x] ML 
 	- [x] Matrix factorization for rec systems
 	- [x] Embedding paper - Vicki Boykis
 	- [x] CS 231N notes
@@ -22,28 +22,30 @@
 		- [x] Sentence transformers
 		- [x] CLIP model
 - [ ] Study Design
-	- [ ] Interview prep
+	- [x] Interview prep
 		- [x] [FAANG ML system design interview guide](https://www.reddit.com/r/learnmachinelearning/comments/1glkkve/faang_ml_system_design_interview_guide/)
 		- [x] [Interview Framework](https://www.tryexponent.com/blog/machine-learning-system-design-interview-guide)
 		- [x] [System Design in ML - Geeks for Geeks](https://www.geeksforgeeks.org/system-design/system-design-in-machine-learning/)
 		- [x] [Educative.io examples](https://www.educative.io/courses/machine-learning-system-design/problem-statement-and-metrics-g7p515EBD5r) 
-		- [ ] ML Interviews book
-		- [ ] Blog posts
-			- [ ] Airbnb
-			- [ ] Netflix
-			- [ ] StitchFix 
-	- [ ] Concepts
+		- [x] ML Interviews book
+		- [x] Blog posts
+			- [x] Airbnb
+			- [x] Netflix
+			- [x] StitchFix 
+	- [x] Concepts
 		- [x] Continual Learning - podcast
-	- [ ] Domains
-		- [ ] Recommender algorithms
+	- [x] Domains
+		- [x] Recommender algorithms
 			- [x] Basics
 			- [x] Factorization machines
 			- [ ] https://towardsdatascience.com/recommender-systems-a-complete-guide-to-machine-learning-models-96d3f94ea748/ 
 			- [ ] https://arxiv.org/pdf/2404.00579 
 		- [x] Risk control
 			- [x] UFA paper
-	- [ ] Questions
+	- [x] Questions
 		- [x] [Chip Huyen Book](https://huyenchip.com/ml-interviews-book/)
 		- [x] https://huyenchip.com/machine-learning-systems-design/exercises.html 
 		- [x] PACI interview questions
 		- [x] BRIC interview questions
+
+https://developers.google.com/machine-learning - GAN's 

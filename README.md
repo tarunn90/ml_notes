@@ -21,6 +21,7 @@
 # System Design Concepts
 - [Online Learning and Inference](Online%20Learning%20and%20Inference.md)
 - [Real-time Models](Real-time%20Models.md)
+- [LLM Evaluations](LLM%20Evaluations.md) 
 
 # Interviews
 - [ML Interview - Framework](ML%20Interview%20-%20Framework.md)
