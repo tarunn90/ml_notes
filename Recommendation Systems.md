@@ -6,18 +6,19 @@
 
 
 # Similarity Measures
-- Cosine similarity
-- Dot product
-	- Equal to cosine similarity if the vectors are normalized (unit-length)
-- Euclidean distance
-	- 1:1 with cosine similarity if the vectors are normalized
+- **Dot Product:** $\langle u, v \rangle$ 
+- **Cosine Similarity:** $\langle u, v \rangle / ||u||||v||$
+	- Equal to dot product if the vectors are L2-normalized (unit-length) since $||u||=||v||=1$ 
+	- Useful if vectors are un-normalized but we don't care about their magnitudes
+- **Euclidean Distance:** $||u-v||_2 = \sqrt{\sum\limits_j^{k=1} (u_j - v_j)^2}$ 
+	- Inversely proportional to Cosine similarity if the vectors are normalized
+	- Suffers from curse of dimensionality
 
 More popular items may have larger norms (because they get more gradient updates and move farther from the origin during training) and this will influence the dot product similarity, for better or worse.
 
 
 
 # Content-Based Filtering
-
 Uses *similarity between items* to recommend items similar to what the user has liked. 
 * Each row in the item matrix represents an item's features
 * Each row in the user matrix represents a user's features
@@ -48,24 +49,24 @@ Item matrix:
 | The Notebook | 0      | 1.0     | 0      | 0.9   | 0      |
 | Interstellar | 0.3    | 0       | 1.0    | 0.5   | 0      |
 
-User matrix: (Alice liked Titanic and The Notebook while Bob liked Inception and Avengers)
+User matrix: (let's say Alice liked Titanic and The Notebook while Bob liked Inception and Avengers)
 
 | User  | Action | Romance | Sci-Fi | Drama | Comedy |
 | ----- | ------ | ------- | ------ | ----- | ------ |
 | Alice | 0      | 1.0     | 0      | 0.85  | 0      |
 | Bob   | 0.85   | 0       | 0.75   | 0.15  | 0.2    |
 
-Then taking the **dot product** of each user and item, we would get low ratings for Alice on Inception while Bob would get high ratings on Interstellar. 
+Similarity metric:
+- Taking the **dot product** of each user and item, we would get low ratings for Alice on Inception while Bob would get high ratings on Interstellar. 
+Search algorithm:
+ - We could use **KNN** or **ANN** to find items that are similar to a given user. 
 
-We could also use **KNN** or **ANN** to find items that are similar to a given user. 
-
-
-
+E.g., Spotify's "similar songs" feature
 
 
 
 # Collaborative Filtering
-Uses *similarities between users* to recommend items. If user A is similar to user B and user B liked item 1, we recommend item 1 to user A. 
+Uses *similarities between users* to recommend items. If User A is similar to User B and User B liked Item 1, we recommend Item 1 to User A. 
 
 Pros:
 - Features can be hand-engineered or learned embeddings
@@ -74,6 +75,7 @@ Pros:
 
 Cons:
 - Cold-start problem: system can't make accurate recommendations for new users
+	- To solve for this, we could ask for preferences on registration
 - Doesn't handle users with niche interests well: might be difficult to find similar users
 
 
@@ -93,12 +95,16 @@ Note that this matrix will likely be very sparse as most users do not interact w
 
 In the example above, Alice and Bob both like Movie A and so we infer a) Alice would give Movie C ~2 stars b) Bob would give Movie B ~3 stars
 
+E.g., Netflix's user-based recommendations. 
+
 Note that this is **user-based** collaborative filtering, but there is also **item-item** collaborative filtering. 
+
 
 
 
 ## Item-Item (item-based) Collaborative filtering
 Using the same example, Movies A and C seem negatively correlated, therefore we predict that Alice would give Movie C a low rating. 
+- E.g., Amazon's "Customers also bought..." feature 
 
 
 
@@ -119,7 +125,7 @@ flowchart LR
 ```
 
 # Matrix Factorization
-Matrix factorization is useful for several reasons:
+Matrix Factorization is useful for several reasons:
 - Dimensionality reduction: the user-item matrix $A$ is huge and sparse, so compression makes computations faster and storage easier
 	- Scalability: instead of searching through huge, sparse matrices, we're just multiplying vectors together
 - Latent factors: the factorization model can discover certain "latent factors" like "action intensity" or "emotional depth" 
@@ -169,7 +175,7 @@ However, there's a major problem here. If we only use the observed $(i,j)$ pairs
 ## Pros and Cons
 Pros: 
 - Rather than needing domain knowledge, we learn embeddings
-- Rather than only relying on user's prior interests, we can show them items, increasing the diversity of recommendations
+- Rather than only relying on user's prior interests, we can show them a variety of items, increasing the diversity of recommendations
 Cons:
 - Cold-start problem for items
 	- Can be approximated with heuristics (e.g., average of embeddings from same creator)
@@ -233,6 +239,24 @@ One common problem with deep factorization is **folding**:
 
 
 # Factorization Machines
+https://medium.com/data-science/factorization-machines-for-item-recommendation-with-implicit-feedback-data-5655a7c749db
+- Basically, it **allows simple models to capture higher-order feature interactions** without adding tons of interaction variables. 
+- Matrix Factorization (MF) above only allows a user-item interaction matrix as input. FM's allow for more features. 
+- Can be used for regression/classification (any supervised learning) but became famous for recommendations.
+- For $n$ features, we can capture up to $n$-way feature interactions: 2-way, 3-way, etc. 
+- Critically, FM's allow us train with *linear time* complexity
+
+## Structure
+This is a standard pairwise interaction model:
+$$f(x) = w_0 + \sum\limits_{p=1}^P w_p x_p + \sum\limits_{p=1}^{P-1}\sum\limits_{q=p+1}^P w_{p,q}x_px_q$$ 
+This is the  (2nd-order) factorized interaction model: 
+
+$$f(x) = w_0 + \sum\limits_{p=1}^P w_p x_p + \sum\limits_{p=1}^{P-1}\sum\limits_{q=p+1}^P \langle v_p v_q \rangle x_px_q$$
+
+## Loss Function
+
+## Optimization
+
 
 The above linear matrix factorization only models **2-way interactions:** between users and items. 
 
@@ -302,11 +326,11 @@ flowchart LR
 
 ## Scoring
 * Need to think very carefully about objective function for scoring:
-- Maximizing Click Rate:
-	- The system may recommend click-bait videos
-- Maximize Watch Time:
-	- The system may recommend very long videos
-- Increase diversity and maximize *session* watch time 
+	- Maximizing Click Rate:
+		- The system may recommend click-bait videos
+	- Maximize Watch Time:
+		- The system may recommend very long videos
+	- We want to increase diversity and maximize *session* watch time 
 - Scoring can be done with any models which generate probabilities or scores
 	- Logistic regression trained against, e.g., click event
 	- Factorization Machines

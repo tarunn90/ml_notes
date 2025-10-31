@@ -1,7 +1,9 @@
-
+# Overview
 Integrity enforcement on social media is split into two categories:
 1. Harmful content: posts that contain violence, nudity, self-harm, hate speech, etc. 
 2. Bad actors: Fake accounts, spam, phishing, organized unethical activities, other unsafe behaviors
+
+
 
 # Clarifying Questions
 - What types of media do we want to monitor? Images, text, videos?
@@ -10,6 +12,8 @@ Integrity enforcement on social media is split into two categories:
 	- If not, do we have user reports? 
 - What is the required latency?
 	- Suggest: real-time for most urgent categories like violence; near-real time or hourly for others. 
+
+
 
 # Framing the Problem as an ML Task
 Given that we are running on multiple modalities (image, text), we can use **fusing methods** to combine the data. 
@@ -43,7 +47,7 @@ Cons:
 	* The task-specific layers have one "head" per task. 
 
 ```mermaid
-flowchart LR
+flowchart TD
     A[Fused features] --> B[Shared layers]
     B --> C[Transformed features]
     C --> D[Task-specific layers]
@@ -51,10 +55,14 @@ flowchart LR
 ```
 
 
+
+
 # Data Preparation
 - User data: demographics, location
-- Posts data: IP, timestamp, text, image, links
-- User-post interactions: likes comments, saves, teimstamp
+- Posts data: text, image, IP, upload timestamp, links
+- User-post interactions: likes comments, saves, timestamp
+
+
 
 # Feature Engineering
 ## Textual Content
@@ -76,11 +84,20 @@ flowchart LR
 - Number of followers and following
 - Device features: device type, app version, VPN usage
 
+
+
 # Labels
-- Hand labeling: slow but accurate
-- Natural labeling: fast but noisy
+- Hand Labeling: slow but accurate
+- Natural Labeling: fast but noisy
+	- User Reports
+	- Comment Reactions
+	- Keyword Triggers
 
 Can use **hand labeling for offline evaluation (accuracy) and natural labeling for training (scale)**. 
+
+
+
+
 # Model Development
 Normal neural network training: 
 - Binary cross-entropy loss for each task 
@@ -96,6 +113,8 @@ PR, AUROC
 - Valid appeals: control metric
 - A-B tests
 
+
+
 # Serving
 User uploads posts to application, which calls the Harmful Content Detection Service
 
@@ -106,5 +125,5 @@ This service calls:
 
 ## Punishments
 We have a number of possible punishments depending on confidence from model:
-- High confidence: remove post from server
+- High confidence: remove post from server, block user
 - Medium confidence: demote post from feed
