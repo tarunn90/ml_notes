@@ -77,7 +77,7 @@ Note that Faithfulness can also be measured by humans or rule-based methods (NER
 # Online Metrics
 
 ## 1. Conversation-Level Metrics
-- CSAT User Satisfaction Score: $\frac{\#(\text{satisfied responses})}{\#(\text{total responses})}$ 
+- CSAT User Satisfaction Score: $\frac{\text{No. of of satisfied responses}}{\text{No. of total responses}}$ 
 - Resolution rate: % of sessions resolved without human-in-the-loop
 - Average conversation length
 - AB test against baseline

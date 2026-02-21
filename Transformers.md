@@ -14,7 +14,7 @@
 
 
 # Seq2Seq Models
-Seq2Seq models take in one sequence of input and generate another sequence as output. At 
+Seq2Seq models take in one sequence of input and generate another sequence as output.
 
 We do the following at each time step of the input:
 - Generate new hidden state and pass into following `encoder` call
@@ -58,9 +58,9 @@ There are two major changes from a classic seq2seq model:
 
 Let's formalize this: 
 
-So the context vector $c_i$ at time step $i$ is the weighted sum of the hidden states from the input. 
+The context vector $c_i$ at time step $i$ is the weighted sum of the hidden states from the input. 
 
-The score for hidden state $h_j$ from input word $j$ at time step $i$ is a function of the hidden state $h_j$ and the previous decoder hidden state $s_{i-1}$: 
+The score $e_{i,j}$ for hidden state $h_j$ from input word $j$ at time step $i$ is a function of the hidden state $h_j$ and the previous decoder hidden state $s_{i-1}$: 
 $$
 \displaylines{
 e_{i,j} = a(s_{i-1}, h_j)
@@ -103,6 +103,7 @@ The architectures above were all *recurrent*. There are two major problems with 
 
 1. **Parallelization is limited** due to time dependence: $h_t = \sigma(Wh_{t-1} + Ux_t)$. This limits GPU utilization and slows computation. 
 2. **Linear interaction distance:** the number of interactions between any pair of tokens in a sentence scales linearly with the number of tokens between them: <img src="imgs/Pasted image 20251004111224.png">
+
 What if we did away with recurrence and *only used attention*?  
 
 
@@ -190,9 +191,23 @@ flowchart TB
     style Cross fill:#ffe1e1
 ```
 
+
+# Training and Compute Considerations
+- **FLOPs:** Floating Point Operations. Metric to capture how many operations it takes to, e.g., train a model. Compute required for a given task. 
+- **FLOP/s:** Floating Point Operations per second: how many floating point operations per second you can run at a machine's peak performance. Usually machines are utilized *below* their peak performance (50-70% of the peak) so the actual speed will be lower. 
+- Time to train model:
+$$
+\text{Time to Train (\# seconds)} = \frac{\text{Dataset Size (\# FLOPs)}}{\text{Total FLOP/s across all GPU's}}
+$$
+- **Compute-optimal:** a model that can achieve the best possible performance given a fixed compute budget. For compute-optimal training, you typically need # training tokens to be ~ 20x model size. 
+
 # Training vs Pretraining
 - Note that the transformer architecture presented here requires an "input" sequence and an "output" sequence (e.g., English -> French) and therefore requires **labeled data**. Moreover, it is **specific to one task**. 
 - The architectures presented below are more general: rather than requiring labeled data, they are just fed millions of sentences from the internet and then can be fine-tuned for classification or NER or sentiment analysis. 
+
+
+# Mixture of Experts
+Mixture of Experts, e.g. Mixtral, are a kind of *sparse model* that is divided into groups of parameters called **experts**. For each layer, for each token, only two experts are active. This greatly reduces the cost and speed of inference for this model. 
 
 
 
@@ -271,6 +286,11 @@ Pros:
 Cons:
 - Fixed context window => large documents need chunking
 
+
+# GPT
+Generative Pre-trained Transformer
+
+Autoregressive: each generated token is conditioned on the *previous* one. Note that this means that, while the *input processing* can be parallelized, the *output generation* must still be sequential. 
 
 
 # CLIP

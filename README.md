@@ -27,6 +27,7 @@
 
 # System Design Concepts
 - [ML System Design Study Notes (CS 329S notes)](ML%20System%20Design%20Study%20Notes%20(CS%20329S%20notes).md) 
+- [AI Engineering - Chip Huyen Notes](AI%20Engineering%20-%20Chip%20Huyen.md) 
 - [Online Learning and Inference](Online%20Learning%20and%20Inference.md)
 - [Real-time Models](Real-time%20Models.md)
 - [LLM Evaluations](LLM%20Evaluations.md) 
